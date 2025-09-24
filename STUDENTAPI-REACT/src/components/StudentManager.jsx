@@ -3,48 +3,45 @@ import axios from 'axios';
 import './style.css';
 import config from './config.js';
 
-const StudentManager = () => {
-  const [students, setStudents] = useState([]);
-  const [student, setStudent] = useState({
+const LibraryManager = () => {
+  const [books, setBooks] = useState([]);
+  const [book, setBook] = useState({
     id: '',
-    name: '',
-    gender: '',
-    department: '',
-    program: '',
+    title: '',
+    author: '',
+    category: '',
+    publisher: '',
     year: '',
-    semester: '',
-    email: '',
-    password: '',
-    contact: ''
+    isbn: '',
+    copies: ''
   });
   const [idToFetch, setIdToFetch] = useState('');
-  const [fetchedStudent, setFetchedStudent] = useState(null);
+  const [fetchedBook, setFetchedBook] = useState(null);
   const [message, setMessage] = useState('');
   const [editMode, setEditMode] = useState(false);
 
-  const baseUrl = `${config.url}/studentapi`;
+  const baseUrl = `${config.url}/libraryapi`;
 
   useEffect(() => {
-    fetchAllStudents();
+    fetchAllBooks();
   }, []);
 
-  const fetchAllStudents = async () => {
+  const fetchAllBooks = async () => {
     try {
       const res = await axios.get(`${baseUrl}/all`);
-      setStudents(res.data);
+      setBooks(res.data);
     } catch (error) {
-      setMessage('Failed to fetch students.');
+      setMessage('Failed to fetch books.');
     }
   };
 
   const handleChange = (e) => {
-    setStudent({ ...student, [e.target.name]: e.target.value });
+    setBook({ ...book, [e.target.name]: e.target.value });
   };
 
-
   const validateForm = () => {
-    for (let key in student) {
-      if (!student[key] || student[key].toString().trim() === '') {
+    for (let key in book) {
+      if (!book[key] || book[key].toString().trim() === '') {
         setMessage(`Please fill out the ${key} field.`);
         return false;
       }
@@ -52,131 +49,101 @@ const StudentManager = () => {
     return true;
   };
 
-  const addStudent = async () => {
+  const addBook = async () => {
     if (!validateForm()) return;
     try {
-      await axios.post(`${baseUrl}/add`, student);
-      setMessage('Student added successfully.');
-      fetchAllStudents();
+      await axios.post(`${baseUrl}/add`, book);
+      setMessage('Book added successfully.');
+      fetchAllBooks();
       resetForm();
     } catch (error) {
-      setMessage('Error adding student.');
+      setMessage('Error adding book.');
     }
   };
 
-  const updateStudent = async () => {
+  const updateBook = async () => {
     if (!validateForm()) return;
     try {
-      await axios.put(`${baseUrl}/update`, student);
-      setMessage('Student updated successfully.');
-      fetchAllStudents();
+      await axios.put(`${baseUrl}/update`, book);
+      setMessage('Book updated successfully.');
+      fetchAllBooks();
       resetForm();
     } catch (error) {
-      setMessage('Error updating student.');
+      setMessage('Error updating book.');
     }
   };
 
-  const deleteStudent = async (id) => {
+  const deleteBook = async (id) => {
     try {
       const res = await axios.delete(`${baseUrl}/delete/${id}`);
       setMessage(res.data);
-      fetchAllStudents();
+      fetchAllBooks();
     } catch (error) {
-      setMessage('Error deleting student.');
+      setMessage('Error deleting book.');
     }
   };
 
-  const getStudentById = async () => {
+  const getBookById = async () => {
     try {
       const res = await axios.get(`${baseUrl}/get/${idToFetch}`);
-      setFetchedStudent(res.data);
+      setFetchedBook(res.data);
       setMessage('');
     } catch (error) {
-      setFetchedStudent(null);
-      setMessage('Student not found.');
+      setFetchedBook(null);
+      setMessage('Book not found.');
     }
   };
 
-  const handleEdit = (stud) => {
-    setStudent(stud);
+  const handleEdit = (b) => {
+    setBook(b);
     setEditMode(true);
-    setMessage(`Editing student with ID ${stud.id}`);
+    setMessage(`Editing book with ID ${b.id}`);
   };
 
   const resetForm = () => {
-    setStudent({
+    setBook({
       id: '',
-      name: '',
-      gender: '',
-      department: '',
-      program: '',
+      title: '',
+      author: '',
+      category: '',
+      publisher: '',
       year: '',
-      semester: '',
-      email: '',
-      password: '',
-      contact: ''
+      isbn: '',
+      copies: ''
     });
     setEditMode(false);
   };
 
   return (
-    <div className="student-container">
+    <div className="library-container">
 
-{message && (
-  <div className={`message-banner ${message.toLowerCase().includes('error') ? 'error' : 'success'}`}>
-    {message}
-  </div>
-)}
+      {message && (
+        <div className={`message-banner ${message.toLowerCase().includes('error') ? 'error' : 'success'}`}>
+          {message}
+        </div>
+      )}
 
-
-      <h2>Employee Management</h2>
+      <h2>Library Management</h2>
 
       <div>
-        <h3>{editMode ? 'Edit Student' : 'Add Student'}</h3>
+        <h3>{editMode ? 'Edit Book' : 'Add Book'}</h3>
         <div className="form-grid">
-          <input type="number" name="id" placeholder="ID" value={student.id} onChange={handleChange} />
-          <input type="text" name="name" placeholder="Name" value={student.name} onChange={handleChange} />
-          <select name="gender" value={student.gender} onChange={handleChange}>
-            <option value="">Select Gender</option>
-            <option value="MALE">MALE</option>
-            <option value="FEMALE">FEMALE</option>
-          </select>
-          <select name="department" value={student.department} onChange={handleChange}>
-            <option value="">Select Department</option>
-            <option value="CSE">CSE</option>
-            <option value="ECE">ECE</option>
-            <option value="CS&IT">CS&IT</option>
-          </select>
-          <select name="program" value={student.program} onChange={handleChange}>
-            <option value="">Select Program</option>
-            <option value="B.Tech">B.Tech</option>
-            <option value="M.Tech">M.Tech</option>
-            <option value="BCA">BCA</option>
-            <option value="MCA">MCA</option>
-          </select>
-          <select name="year" value={student.year} onChange={handleChange}>
-            <option value="">Select Year</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-          </select>
-          <select name="semester" value={student.semester} onChange={handleChange}>
-            <option value="">Select Semester</option>
-            <option value="ODD">ODD</option>
-            <option value="EVEN">EVEN</option>
-          </select>
-          <input type="email" name="email" placeholder="Email" value={student.email} onChange={handleChange} />
-          <input type="password" name="password" placeholder="Password" value={student.password} onChange={handleChange} />
-          <input type="text" name="contact" placeholder="Contact" value={student.contact} onChange={handleChange} />
+          <input type="number" name="id" placeholder="ID" value={book.id} onChange={handleChange} />
+          <input type="text" name="title" placeholder="Title" value={book.title} onChange={handleChange} />
+          <input type="text" name="author" placeholder="Author" value={book.author} onChange={handleChange} />
+          <input type="text" name="category" placeholder="Category" value={book.category} onChange={handleChange} />
+          <input type="text" name="publisher" placeholder="Publisher" value={book.publisher} onChange={handleChange} />
+          <input type="number" name="year" placeholder="Year" value={book.year} onChange={handleChange} />
+          <input type="text" name="isbn" placeholder="ISBN" value={book.isbn} onChange={handleChange} />
+          <input type="number" name="copies" placeholder="Copies" value={book.copies} onChange={handleChange} />
         </div>
 
         <div className="btn-group">
           {!editMode ? (
-            <button className="btn-blue" onClick={addStudent}>Add Employee</button>
+            <button className="btn-blue" onClick={addBook}>Add Book</button>
           ) : (
             <>
-              <button className="btn-green" onClick={updateStudent}>Update Employee</button>
+              <button className="btn-green" onClick={updateBook}>Update Book</button>
               <button className="btn-gray" onClick={resetForm}>Cancel</button>
             </>
           )}
@@ -184,48 +151,48 @@ const StudentManager = () => {
       </div>
 
       <div>
-        <h3>Get Employee By ID</h3>
+        <h3>Get Book By ID</h3>
         <input
           type="number"
           value={idToFetch}
           onChange={(e) => setIdToFetch(e.target.value)}
           placeholder="Enter ID"
         />
-        <button className="btn-blue" onClick={getStudentById}>Fetch</button>
+        <button className="btn-blue" onClick={getBookById}>Fetch</button>
 
-        {fetchedStudent && (
+        {fetchedBook && (
           <div>
-            <h4>Employee Found:</h4>
-            <pre>{JSON.stringify(fetchedStudent, null, 2)}</pre>
+            <h4>Book Found:</h4>
+            <pre>{JSON.stringify(fetchedBook, null, 2)}</pre>
           </div>
         )}
       </div>
 
       <div>
-        <h3>All employees</h3>
-        {students.length === 0 ? (
-          <p>No emplyees found.</p>
+        <h3>All Books</h3>
+        {books.length === 0 ? (
+          <p>No books found.</p>
         ) : (
           <div className="table-wrapper">
             <table>
               <thead>
                 <tr>
-                  {Object.keys(student).map((key) => (
+                  {Object.keys(book).map((key) => (
                     <th key={key}>{key}</th>
                   ))}
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {students.map((stud) => (
-                  <tr key={stud.id}>
-                    {Object.keys(student).map((key) => (
-                      <td key={key}>{stud[key]}</td>
+                {books.map((b) => (
+                  <tr key={b.id}>
+                    {Object.keys(book).map((key) => (
+                      <td key={key}>{b[key]}</td>
                     ))}
                     <td>
                       <div className="action-buttons">
-                        <button className="btn-green" onClick={() => handleEdit(stud)}>Edit</button>
-                        <button className="btn-red" onClick={() => deleteStudent(stud.id)}>Delete</button>
+                        <button className="btn-green" onClick={() => handleEdit(b)}>Edit</button>
+                        <button className="btn-red" onClick={() => deleteBook(b.id)}>Delete</button>
                       </div>
                     </td>
                   </tr>
@@ -240,4 +207,4 @@ const StudentManager = () => {
   );
 };
 
-export default StudentManager;
+export default LibraryManager;

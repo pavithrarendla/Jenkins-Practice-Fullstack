@@ -43,27 +43,27 @@ button {
 }
 
 .btn-blue {
-  background-color: #007bff;
+  background-color: #10181f;
 }
 
 .btn-blue:hover {
-  background-color: #0056b3;
+  background-color: #070b0f;
 }
 
 .btn-green {
-  background-color: #28a745;
+  background-color: #0a110b;
 }
 
 .btn-green:hover {
-  background-color: #1c7c34;
+  background-color: #0b150f;
 }
 
 .btn-red {
-  background-color: #dc3545;
+  background-color: #090505;
 }
 
 .btn-red:hover {
-  background-color: #a71d2a;
+  background-color: #160b0d;
 }
 
 .btn-gray {
@@ -132,9 +132,9 @@ pre {
 }
 
 .message-banner.error {
-  background-color: #f44336;
+  background-color: #c4bbbb;
 }
 
 .message-banner.success {
-  background-color: #4caf50; 
+  background-color: #c9d0c9; 
 }

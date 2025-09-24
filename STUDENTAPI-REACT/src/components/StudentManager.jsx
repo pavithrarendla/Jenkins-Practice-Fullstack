@@ -129,7 +129,7 @@ const StudentManager = () => {
 )}
 
 
-      <h2>Student Management - Happy Independence</h2>
+      <h2>Employee Management</h2>
 
       <div>
         <h3>{editMode ? 'Edit Student' : 'Add Student'}</h3>
@@ -173,10 +173,10 @@ const StudentManager = () => {
 
         <div className="btn-group">
           {!editMode ? (
-            <button className="btn-blue" onClick={addStudent}>Add Student</button>
+            <button className="btn-blue" onClick={addStudent}>Add Employee</button>
           ) : (
             <>
-              <button className="btn-green" onClick={updateStudent}>Update Student</button>
+              <button className="btn-green" onClick={updateStudent}>Update Employee</button>
               <button className="btn-gray" onClick={resetForm}>Cancel</button>
             </>
           )}
@@ -184,7 +184,7 @@ const StudentManager = () => {
       </div>
 
       <div>
-        <h3>Get Student By ID</h3>
+        <h3>Get Employee By ID</h3>
         <input
           type="number"
           value={idToFetch}
@@ -195,16 +195,16 @@ const StudentManager = () => {
 
         {fetchedStudent && (
           <div>
-            <h4>Student Found:</h4>
+            <h4>Employee Found:</h4>
             <pre>{JSON.stringify(fetchedStudent, null, 2)}</pre>
           </div>
         )}
       </div>
 
       <div>
-        <h3>All Students</h3>
+        <h3>All employees</h3>
         {students.length === 0 ? (
-          <p>No students found.</p>
+          <p>No emplyees found.</p>
         ) : (
           <div className="table-wrapper">
             <table>
